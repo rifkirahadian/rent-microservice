@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  listing-service:
+    build:
+      context: ./listing-service
+    ports:
+      - "8080:8080" 
+    environment:
+      DB_DRIVER: sqlite3
+      DB_PATH: /app/data/listing-service.db
+    volumes:
+      - ./data:/app/data
+    networks:
+      - app-network
+  
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "8081:8081" 
+    environment:
+      DB_DRIVER: sqlite3
+      DB_PATH: /app/data/listing-service.db
+    volumes:
+      - ./data:/app/data
+    networks:
+      - app-network
+  
+  public-api:
+    build:
+      context: ./public-api
+    ports:
+      - "8082:8082"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
